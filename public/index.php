@@ -19,6 +19,9 @@ $cache = new \App\Cache(require __DIR__ . '/../config/redis.php');
 // Инициализация почты
 $mailer = new \App\Mailer(require __DIR__ . '/../config/mail.php');
 
+// Подключение шаблона (render_page)
+require_once __DIR__ . '/../templates/layout.php';
+
 // Роутинг
 $page = $_GET['page'] ?? 'home';
 $slug = $_GET['slug'] ?? null;

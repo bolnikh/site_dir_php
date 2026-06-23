@@ -3,12 +3,8 @@
  * Страница «О нас» — /about
  */
 
-$pageTitle = 'О нас';
-$breadcrumbs = breadcrumbs_static('О нас');
-
-ob_start();
-?>
-<div class="about-page">
+render_page('О нас', breadcrumbs_static('О нас'), function () {
+    ?>
     <h2>О нас</h2>
 
     <p>Добро пожаловать в <strong>HomeCatalog</strong> — ваш личный гид по лучшим сайтам для дома и семьи.</p>
@@ -36,8 +32,5 @@ ob_start();
     <p>Email: <a href="mailto:catalog@homecatalog.ru">catalog@homecatalog.ru</a></p>
 
     <p class="mt-4">Спасибо, что вы с нами! ❤️</p>
-</div>
-<?php
-$content = ob_get_clean();
-
-require __DIR__ . '/../templates/layout.php';
+    <?php
+});

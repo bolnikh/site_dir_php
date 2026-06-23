@@ -13,29 +13,21 @@ if (!$siteId) {
     return;
 }
 
-$pageTitle = 'Модерация сайта';
-$breadcrumbs = breadcrumbs_generate([
-    ['title' => 'Модерация', 'url' => '/moderator/list'],
-    ['title' => 'Сайт #' . $siteId, 'url' => null],
-]);
+render_page('Модерация сайта', breadcrumbs_generate([
+    ['label' => 'Модерация', 'url' => '/moderator/list'],
+    ['label' => 'Сайт #' . $siteId, 'url' => null],
+]), function () use ($siteId) {
+    ?>
+    <h2>🛡️ Модерация сайта</h2>
 
-// TODO: Загрузка данных сайта и кнопки одобрить/отклонить (шаг 13)
+    <!-- TODO: Данные сайта, кнопки одобрить/отклонить, форма редактирования (шаг 13) -->
 
-ob_start();
-?>
-<h2>🛡️ Модерация сайта</h2>
+    <div class="alert alert-info">
+        Страница модерации будет реализована на шаге 13.
+    </div>
 
-<!-- TODO: Данные сайта, кнопки одобрить/отклонить, форма редактирования (шаг 13) -->
-
-<div class="alert alert-info">
-    Страница модерации будет реализована на шаге 13.
-</div>
-
-<p>
-    <a href="/moderator/list" class="btn btn-outline-secondary">← Назад к списку</a>
-</p>
-
-<?php
-$content = ob_get_clean();
-
-require __DIR__ . '/../templates/layout.php';
+    <p>
+        <a href="/moderator/list" class="btn btn-outline-secondary">← Назад к списку</a>
+    </p>
+    <?php
+});

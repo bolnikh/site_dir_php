@@ -5,30 +5,22 @@
 
 // TODO: Проверка авторизации (шаг 11)
 
-$pageTitle = 'Добавить раздел';
-$breadcrumbs = breadcrumbs_generate([
-    ['title' => 'Модерация', 'url' => '/moderator/list'],
-    ['title' => 'Разделы', 'url' => '/moderator/sections'],
-    ['title' => 'Добавить', 'url' => null],
-]);
+render_page('Добавить раздел', breadcrumbs_generate([
+    ['label' => 'Модерация', 'url' => '/moderator/list'],
+    ['label' => 'Разделы', 'url' => '/moderator/sections'],
+    ['label' => 'Добавить', 'url' => null],
+]), function () {
+    ?>
+    <h2>Добавить раздел</h2>
 
-// TODO: Форма добавления раздела (шаг 14)
+    <!-- TODO: Форма добавления раздела (шаг 14) -->
 
-ob_start();
-?>
-<h2>Добавить раздел</h2>
+    <div class="alert alert-info">
+        Добавление раздела будет реализовано на шаге 14.
+    </div>
 
-<!-- TODO: Форма добавления раздела (шаг 14) -->
-
-<div class="alert alert-info">
-    Добавление раздела будет реализовано на шаге 14.
-</div>
-
-<p>
-    <a href="/moderator/sections" class="btn btn-outline-secondary">← Назад к разделам</a>
-</p>
-
-<?php
-$content = ob_get_clean();
-
-require __DIR__ . '/../templates/layout.php';
+    <p>
+        <a href="/moderator/sections" class="btn btn-outline-secondary">← Назад к разделам</a>
+    </p>
+    <?php
+});

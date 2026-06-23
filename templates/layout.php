@@ -1,24 +1,47 @@
 <?php
+
 /**
- * Общий шаблон страницы
+ * Общий шаблон страницы — render_page()
  *
- * Ожидаемые переменные перед подключением:
- * @var array  $appConfig  — конфигурация приложения
- * @var string $pageTitle  — заголовок страницы
- * @var array  $breadcrumbs — хлебные крошки (результат breadcrumbs_*())
- * @var ?array $currentUser — данные текущего пользователя
- *
- * Содержимое страницы передаётся в переменной $content
- * и выводится между header и footer.
+ * @param string   $title       Заголовок страницы (для <title>)
+ * @param array    $breadcrumbs Хлебные крошки [['label' => '...', 'url' => '...|null'], ...]
+ * @param callable $content     Callback, который выводит HTML основного блока
  */
+function render_page(string $title, array $breadcrumbs, callable $content): void
+{
+    require __DIR__ . '/header.php';
+    ?>
+    <!-- Flash messages -->
+    <div class="container mt-3">
+        <?php foreach (flash_get() as $msg): ?>
+            <div class="alert alert-<?= h($msg['type']) ?> alert-dismissible fade show" role="alert">
+                <?= h($msg['message']) ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+            </div>
+        <?php endforeach; ?>
+    </div>
 
-// Подключаем шапку
-require __DIR__ . '/header.php';
+    <!-- Breadcrumbs -->
+    <?php if (!empty($breadcrumbs)): ?>
+    <nav class="container mt-2" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <?php $last = array_key_last($breadcrumbs); ?>
+            <?php foreach ($breadcrumbs as $i => $crumb): ?>
+                <?php if ($i === $last): ?>
+                    <li class="breadcrumb-item active" aria-current="page"><?= h($crumb['label']) ?></li>
+                <?php else: ?>
+                    <li class="breadcrumb-item"><a href="<?= h($crumb['url']) ?>"><?= h($crumb['label']) ?></a></li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ol>
+    </nav>
+    <?php endif; ?>
 
-// Выводим содержимое страницы
-if (isset($content)) {
-    echo $content;
+    <!-- Main content -->
+    <main class="container mt-3">
+        <?php $content(); ?>
+    </main>
+
+    <?php
+    require __DIR__ . '/footer.php';
 }
-
-// Подключаем подвал
-require __DIR__ . '/footer.php';

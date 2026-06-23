@@ -3,12 +3,8 @@
  * Страница «Правила» — /rules
  */
 
-$pageTitle = 'Правила';
-$breadcrumbs = breadcrumbs_static('Правила');
-
-ob_start();
-?>
-<div class="rules-page">
+render_page('Правила', breadcrumbs_static('Правила'), function () {
+    ?>
     <h2>Правила каталога</h2>
 
     <h3>1. Добавление сайтов</h3>
@@ -42,8 +38,5 @@ ob_start();
 
     <hr>
     <p>По всем вопросам: <a href="mailto:rules@homecatalog.ru">rules@homecatalog.ru</a></p>
-</div>
-<?php
-$content = ob_get_clean();
-
-require __DIR__ . '/../templates/layout.php';
+    <?php
+});

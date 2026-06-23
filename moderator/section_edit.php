@@ -13,30 +13,22 @@ if (!$sectionId) {
     return;
 }
 
-$pageTitle = 'Редактировать раздел';
-$breadcrumbs = breadcrumbs_generate([
-    ['title' => 'Модерация', 'url' => '/moderator/list'],
-    ['title' => 'Разделы', 'url' => '/moderator/sections'],
-    ['title' => 'Редактировать', 'url' => null],
-]);
+render_page('Редактировать раздел', breadcrumbs_generate([
+    ['label' => 'Модерация', 'url' => '/moderator/list'],
+    ['label' => 'Разделы', 'url' => '/moderator/sections'],
+    ['label' => 'Редактировать', 'url' => null],
+]), function () use ($sectionId) {
+    ?>
+    <h2>Редактировать раздел</h2>
 
-// TODO: Загрузка данных раздела и форма редактирования (шаг 14)
+    <!-- TODO: Форма редактирования раздела (шаг 14) -->
 
-ob_start();
-?>
-<h2>Редактировать раздел</h2>
+    <div class="alert alert-info">
+        Редактирование раздела будет реализовано на шаге 14.
+    </div>
 
-<!-- TODO: Форма редактирования раздела (шаг 14) -->
-
-<div class="alert alert-info">
-    Редактирование раздела будет реализовано на шаге 14.
-</div>
-
-<p>
-    <a href="/moderator/sections" class="btn btn-outline-secondary">← Назад к разделам</a>
-</p>
-
-<?php
-$content = ob_get_clean();
-
-require __DIR__ . '/../templates/layout.php';
+    <p>
+        <a href="/moderator/sections" class="btn btn-outline-secondary">← Назад к разделам</a>
+    </p>
+    <?php
+});

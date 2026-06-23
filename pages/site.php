@@ -3,7 +3,6 @@
  * Страница отдельного сайта — /site/slug
  */
 
-$pageTitle = 'Сайт';
 $slug = $_GET['slug'] ?? null;
 
 if (!$slug) {
@@ -14,17 +13,13 @@ if (!$slug) {
 
 // TODO: Загрузка данных сайта (шаг 8)
 
-$breadcrumbs = breadcrumbs_generate([
-    ['title' => 'Сайт', 'url' => null],
-]);
-
-ob_start();
-?>
-<div class="site-detail">
-    <h2><?= h($pageTitle) ?></h2>
-    <!-- TODO: Дата добавления, описание -->
-</div>
-<?php
-$content = ob_get_clean();
-
-require __DIR__ . '/../templates/layout.php';
+render_page('Сайт', breadcrumbs_generate([
+    ['label' => 'Сайт', 'url' => null],
+]), function () {
+    ?>
+    <div class="site-detail">
+        <h2>Сайт</h2>
+        <!-- TODO: Дата добавления, описание -->
+    </div>
+    <?php
+});

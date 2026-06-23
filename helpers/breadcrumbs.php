@@ -5,7 +5,7 @@
  */
 
 /**
- * @param array $items [['title' => '...', 'url' => '...|null'], ...]
+ * @param array $items [['label' => '...', 'url' => '...|null'], ...]
  * @return array
  */
 function breadcrumbs_generate(array $items): array
@@ -14,13 +14,13 @@ function breadcrumbs_generate(array $items): array
 
     // Всегда начинаем с «Начало»
     $crumbs[] = [
-        'title' => 'Начало',
+        'label' => 'Начало',
         'url' => '/',
     ];
 
     foreach ($items as $item) {
         $crumbs[] = [
-            'title' => $item['title'],
+            'label' => $item['label'],
             'url' => $item['url'] ?? null, // null = текущая страница (без ссылки)
         ];
     }
@@ -37,13 +37,13 @@ function breadcrumbs_section(array $ancestors, array $current): array
 
     foreach ($ancestors as $ancestor) {
         $items[] = [
-            'title' => $ancestor['name'],
+            'label' => $ancestor['name'],
             'url' => '/section/' . $ancestor['slug'],
         ];
     }
 
     $items[] = [
-        'title' => $current['name'],
+        'label' => $current['name'],
         'url' => null, // текущий раздел — без ссылки
     ];
 
@@ -59,13 +59,13 @@ function breadcrumbs_site(array $sectionPath, array $site): array
 
     foreach ($sectionPath as $sec) {
         $items[] = [
-            'title' => $sec['name'],
+            'label' => $sec['name'],
             'url' => '/section/' . $sec['slug'],
         ];
     }
 
     $items[] = [
-        'title' => $site['name'],
+        'label' => $site['name'],
         'url' => null, // текущая страница — без ссылки
     ];
 
@@ -78,7 +78,7 @@ function breadcrumbs_site(array $sectionPath, array $site): array
 function breadcrumbs_static(string $title): array
 {
     $items = [
-        ['title' => $title, 'url' => null],
+        ['label' => $title, 'url' => null],
     ];
 
     return breadcrumbs_generate($items);
@@ -95,13 +95,13 @@ function build_breadcrumbs(\PDO $db, array $items): array
 
     // Всегда начинаем с «Начало»
     $crumbs[] = [
-        'title' => 'Начало',
+        'label' => 'Начало',
         'url' => '/',
     ];
 
     foreach ($items as $item) {
         $crumbs[] = [
-            'title' => $item['label'] ?? $item['title'] ?? '',
+            'label' => $item['label'] ?? $item['label'] ?? '',
             'url' => $item['url'] ?? null,
         ];
     }
@@ -121,7 +121,7 @@ function breadcrumbs_from_path(\PDO $db, int $sectionId): array
     )->fetch();
 
     if (!$section) {
-        return breadcrumbs_generate([['title' => 'Раздел не найден', 'url' => null]]);
+        return breadcrumbs_generate([['label' => 'Раздел не найден', 'url' => null]]);
     }
 
     // Получаем ID всех родителей из path
@@ -142,7 +142,7 @@ function breadcrumbs_from_path(\PDO $db, int $sectionId): array
 
             foreach ($ancestors as $ancestor) {
                 $items[] = [
-                    'title' => $ancestor['name'],
+                    'label' => $ancestor['name'],
                     'url' => '/section/' . $ancestor['slug'],
                 ];
             }
@@ -151,7 +151,7 @@ function breadcrumbs_from_path(\PDO $db, int $sectionId): array
 
     // Текущий раздел — без ссылки
     $items[] = [
-        'title' => $section['name'],
+        'label' => $section['name'],
         'url' => null,
     ];
 
