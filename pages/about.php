@@ -5,7 +5,7 @@
 
 render_page('О нас', breadcrumbs_static('О нас'), function () {
     ?>
-    <h2>О нас</h2>
+    <h2>★ О НАС ★</h2>
 
     <p>Добро пожаловать в <strong>HomeCatalog</strong> — ваш личный гид по лучшим сайтам для дома и семьи.</p>
 
@@ -29,7 +29,8 @@ render_page('О нас', breadcrumbs_static('О нас'), function () {
     </ul>
 
     <h3>Контакты:</h3>
-    <p>Email: <a href="mailto:catalog@homecatalog.ru">catalog@homecatalog.ru</a></p>
+    <p>Email: <a href="mailto:catalog@homecatalog.ru">catalog@homecatalog.ru</a><br>
+    ВКонтакте: @homecatalog</p>
 
     <p class="mt-4">Спасибо, что вы с нами! ❤️</p>
     <?php
