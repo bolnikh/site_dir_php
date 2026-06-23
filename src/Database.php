@@ -43,6 +43,14 @@ class Database
     }
 
     /**
+     * Получить PDO-соединение (альтернативное имя)
+     */
+    public function getConnection(): PDO
+    {
+        return $this->pdo;
+    }
+
+    /**
      * Подготовить и выполнить запрос
      */
     public function query(string $sql, array $params = []): \PDOStatement
