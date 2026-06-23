@@ -29,7 +29,7 @@ render_page('О нас', breadcrumbs_static('О нас'), function () {
     </ul>
 
     <h3>Контакты:</h3>
-    <p>Email: <a href="mailto:catalog@homecatalog.ru">catalog@homecatalog.ru</a><br>
+    <p>Email: <a href="#" onclick="this.href='mai'+'lto:'+'cat'+'alog@'+'home'+'cata'+'log'+'.r'+'u';this.textContent='cat'+'alog@'+'home'+'cata'+'log'+'.r'+'u'">📧 Написать нам</a><br>
     ВКонтакте: @homecatalog</p>
 
     <p class="mt-4">Спасибо, что вы с нами! ❤️</p>

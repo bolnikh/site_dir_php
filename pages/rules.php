@@ -37,6 +37,6 @@ render_page('Правила', breadcrumbs_static('Правила'), function () 
     <p>Правила могут меняться без предварительного уведомления.</p>
 
     <hr>
-    <p>По всем вопросам: <a href="mailto:rules@homecatalog.ru">rules@homecatalog.ru</a></p>
+    <p>По всем вопросам: <a href="#" onclick="this.href='mai'+'lto:'+'rul'+'es@'+'home'+'cata'+'log'+'.r'+'u';this.textContent='rul'+'es@'+'home'+'cata'+'log'+'.r'+'u'">📧 Написать нам</a></p>
     <?php
 });

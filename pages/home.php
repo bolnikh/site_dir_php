@@ -80,27 +80,32 @@ render_page('Главная', [], function () use ($rootSections, $allChildren, 
     <?php if (!empty($recentSites)): ?>
     <h3 class="mt-4 mb-3">10 последних сайтов в каталоге</h3>
     <div class="recent-sites">
-        <ol class="site-list list-group list-group-numbered">
-            <?php foreach ($recentSites as $i => $site): ?>
-                <li class="site-list-item list-group-item d-flex justify-content-between align-items-start">
+        <ul class="site-list list-group">
+            <?php foreach ($recentSites as $site):
+                $desc = strip_tags($site['description'] ?? '');
+                $descShort = mb_strlen($desc) > 100 ? mb_substr($desc, 0, 100) . '...' : $desc;
+            ?>
+                <li class="site-list-item list-group-item px-4">
                     <div>
-                        <div class="site-name">
-                            <a href="/site/<?= h($site['slug']) ?>"><?= h($site['name']) ?></a>
-                        </div>
-                        <div class="site-meta">
-                            <span class="site-url">
-                                → <a href="/section/<?= h($site['section_slug']) ?>" class="text-muted">
-                                    <?= h($site['section_name']) ?>
-                                </a>
-                            </span>
-                            <span class="site-date ms-2">
-                                <?= h(date('d.m.Y', strtotime($site['created_at']))) ?>
-                            </span>
-                        </div>
+                        <span class="site-bullet">•</span>
+                        <a href="/site/<?= h($site['slug']) ?>"><?= h($site['name']) ?></a>
+                        <?php if ($descShort !== ''): ?>
+                            — <span class="text-muted small"><?= h($descShort) ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <div class="site-meta">
+                        <span class="site-url">
+                            → <a href="/section/<?= h($site['section_slug']) ?>" class="text-muted">
+                                <?= h($site['section_name']) ?>
+                            </a>
+                        </span>
+                        <span class="site-date ms-2">
+                            <?= h(date('d.m.Y', strtotime($site['created_at']))) ?>
+                        </span>
                     </div>
                 </li>
             <?php endforeach; ?>
-        </ol>
+        </ul>
     </div>
     <?php endif; ?>
     <?php

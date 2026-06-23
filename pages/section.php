@@ -100,18 +100,25 @@ render_page($section['name'], $breadcrumbs, function () use ($section, $children
                 <p class="small text-muted">Страница <?= $currentPage ?> из <?= $totalPages ?></p>
             <?php endif; ?>
 
-            <ol class="site-list list-group list-group-numbered" start="<?= ($currentPage - 1) * 20 + 1 ?>">
-                <?php foreach ($sites as $site): ?>
-                    <li class="site-list-item list-group-item">
-                        <div class="site-name">
+            <ul class="site-list list-group">
+                <?php foreach ($sites as $site):
+                    $desc = strip_tags($site['description'] ?? '');
+                    $descShort = mb_strlen($desc) > 100 ? mb_substr($desc, 0, 100) . '...' : $desc;
+                ?>
+                    <li class="site-list-item list-group-item px-4">
+                        <div>
+                            <span class="site-bullet">•</span>
                             <a href="/site/<?= h($site['slug']) ?>"><?= h($site['name']) ?></a>
+                            <?php if ($descShort !== ''): ?>
+                                — <span class="text-muted small"><?= h($descShort) ?></span>
+                            <?php endif; ?>
                         </div>
                         <div class="site-url small text-muted">
                             <?= h($site['url']) ?> &bull; <?= h(date('d.m.Y', strtotime($site['created_at']))) ?>
                         </div>
                     </li>
                 <?php endforeach; ?>
-            </ol>
+            </ul>
         <?php endif; ?>
     </div>
 

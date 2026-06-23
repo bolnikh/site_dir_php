@@ -58,6 +58,11 @@ render_page($site['name'], $breadcrumbs, function () use ($site) {
         <div class="site-date">
             добавлен: <?= h(date('d.m.Y', strtotime($site['created_at']))) ?>
         </div>
+        <div class="site-url mt-2">
+            <a href="<?= h($site['url']) ?>" target="_blank" rel="nofollow noopener" class="text-decoration-none">
+                <?= h($site['url']) ?>
+            </a>
+        </div>
         <?php if (!empty($site['description'])): ?>
             <div class="site-description mt-3">
                 <?= clean_html($site['description']) ?>
