@@ -3,7 +3,7 @@
  * Модерация отдельного сайта — /moderator/moderate?id=N
  */
 
-// TODO: Проверка авторизации (шаг 11)
+require_moderator();
 
 $siteId = $_GET['id'] ?? null;
 

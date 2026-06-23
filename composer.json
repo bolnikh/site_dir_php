@@ -17,7 +17,8 @@
             "helpers/breadcrumbs.php",
             "helpers/pagination.php",
             "helpers/security.php",
-            "helpers/slug.php"
+            "helpers/slug.php",
+            "helpers/auth.php"
         ]
     },
     "config": {

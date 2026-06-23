@@ -3,7 +3,7 @@
  * Редактирование раздела — /moderator/sections/edit?id=N
  */
 
-// TODO: Проверка авторизации (шаг 11)
+require_moderator();
 
 $sectionId = $_GET['id'] ?? null;
 

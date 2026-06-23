@@ -3,7 +3,7 @@
  * Управление разделами — /moderator/sections
  */
 
-// TODO: Проверка авторизации (шаг 11)
+require_moderator();
 
 render_page('Управление разделами', breadcrumbs_generate([
     ['label' => 'Модерация', 'url' => '/moderator/list'],

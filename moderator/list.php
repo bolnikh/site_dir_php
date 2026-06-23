@@ -3,7 +3,7 @@
  * Список сайтов на модерации — /moderator/list
  */
 
-// TODO: Проверка авторизации (шаг 11)
+require_moderator();
 
 render_page('Сайты на модерации', breadcrumbs_generate([
     ['label' => 'Модерация', 'url' => null],
