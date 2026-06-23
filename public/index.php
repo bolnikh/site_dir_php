@@ -35,6 +35,7 @@ $routes = [
     'about'                   => __DIR__ . '/../pages/about.php',
     'rules'                   => __DIR__ . '/../pages/rules.php',
     'add'                     => __DIR__ . '/../pages/add.php',
+    'contact_us'              => __DIR__ . '/../pages/contact_us.php',
     'moderator/login'         => __DIR__ . '/../moderator/login.php',
     'moderator/logout'        => __DIR__ . '/../moderator/logout.php',
     'moderator/list'          => __DIR__ . '/../moderator/list.php',
@@ -43,6 +44,7 @@ $routes = [
     'moderator/sections/add'  => __DIR__ . '/../moderator/section_add.php',
     'moderator/sections/edit'   => __DIR__ . '/../moderator/section_edit.php',
     'moderator/sections/delete' => __DIR__ . '/../moderator/sections.php', // POST-обработка в sections.php
+    'moderator/contact_us'      => __DIR__ . '/../moderator/contact_us.php',
 ];
 
 if (isset($routes[$page])) {

@@ -129,6 +129,7 @@ render_page('Добавить раздел', breadcrumbs_generate([
 
         <button type="submit" class="btn btn-primary">💾 СОХРАНИТЬ РАЗДЕЛ</button>
         <a href="/moderator/sections" class="btn btn-outline-secondary">Отмена</a>
+        <a href="/moderator/contact_us" class="btn btn-outline-secondary">📬 Сообщения</a>
     </form>
 
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs4.min.css" rel="stylesheet">

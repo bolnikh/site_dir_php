@@ -75,6 +75,7 @@ render_page('Управление разделами', breadcrumbs_generate([
         <a href="/moderator/list" class="btn btn-outline-secondary btn-sm">Список на модерацию</a>
         <a href="/moderator/sections" class="btn btn-outline-primary btn-sm active">Управление разделами</a>
         <a href="/moderator/sections/add" class="btn btn-success btn-sm">+ Добавить раздел</a>
+        <a href="/moderator/contact_us" class="btn btn-outline-secondary btn-sm">📬 Сообщения</a>
         <a href="/moderator/logout" class="btn btn-outline-danger btn-sm ms-auto">Выход</a>
     </div>
 

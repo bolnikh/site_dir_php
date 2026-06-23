@@ -2,7 +2,8 @@
     <div class="container">
         <div class="d-flex justify-content-between">
             <a href="/about" class="text-decoration-none">О нас</a>
-            <a href="/rules" class="text-decoration-none">Правила</a>
+            <a href="/rules" class="text-decoration-none me-4">Правила</a>
+            <a href="/contact_us" class="text-decoration-none">Свяжитесь с нами</a>
         </div>
         <div class="text-center text-muted mt-2 small">
             &copy; <?= date('Y') ?> Каталог сайтов

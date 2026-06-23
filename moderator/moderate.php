@@ -168,6 +168,7 @@ render_page('Модерация сайта', breadcrumbs_generate([
 
     <p>
         <a href="/moderator/list" class="btn btn-outline-secondary">← Назад к списку</a>
+        <a href="/moderator/contact_us" class="btn btn-outline-secondary">📬 Сообщения</a>
     </p>
 
     <!-- Summernote -->

@@ -94,6 +94,48 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    // ================================================
+    // Валидация формы обратной связи
+    // ================================================
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function (e) {
+            let valid = true;
+
+            contactForm.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+            contactForm.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+
+            const email = document.getElementById('email');
+            if (!email.value.trim()) {
+                showError(email, 'Введите email.');
+                valid = false;
+            } else if (!isValidEmail(email.value.trim())) {
+                showError(email, 'Введите корректный email.');
+                valid = false;
+            }
+
+            const message = document.getElementById('message');
+            if (!message.value.trim()) {
+                showError(message, 'Введите сообщение.');
+                valid = false;
+            }
+
+            const agreement = document.getElementById('agreement');
+            if (!agreement.checked) {
+                showError(agreement, 'Необходимо дать согласие на обработку данных.');
+                valid = false;
+            }
+
+            if (!valid) {
+                e.preventDefault();
+                const firstError = contactForm.querySelector('.is-invalid');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    }
 });
 
 /**

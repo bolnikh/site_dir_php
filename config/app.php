@@ -7,4 +7,5 @@ return [
     'recent_sites_count' => 10,
     'debug' => filter_var(getenv('APP_DEBUG'), FILTER_VALIDATE_BOOLEAN),
     'timezone' => 'Europe/Moscow',
+    'admin_email' => 'admin@homecatalog.ru',
 ];
