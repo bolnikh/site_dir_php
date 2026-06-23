@@ -48,7 +48,7 @@ $siteCount = $cache->remember('sites:count:section:' . $section['id'], function 
 
 // 5. Пагинация
 $perPage = $appConfig['sites_per_page'] ?? 20;
-$currentPage = max(1, (int) ($_GET['page'] ?? 1));
+$currentPage = max(1, (int) ($_GET['pg'] ?? 1));
 $totalPages = max(1, (int) ceil($siteCount / $perPage));
 $currentPage = min($currentPage, $totalPages);
 

@@ -38,7 +38,7 @@ function pagination_generate(int $currentPage, int $totalItems, int $perPage, st
 
 function pagination_url(string $baseUrl, int $page, array $queryParams = []): string
 {
-    $params = array_merge($queryParams, ['page' => $page]);
+    $params = array_merge($queryParams, ['pg' => $page]);
     return $baseUrl . '?' . http_build_query($params);
 }
 

@@ -18,7 +18,9 @@
             "helpers/pagination.php",
             "helpers/security.php",
             "helpers/slug.php",
-            "helpers/auth.php"
+            "helpers/auth.php",
+            "templates/emails/site_approved.php",
+            "templates/emails/site_rejected.php"
         ]
     },
     "config": {

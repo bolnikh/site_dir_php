@@ -7,7 +7,7 @@ require_moderator();
 
 // Параметры
 $search = trim($_GET['search'] ?? '');
-$currentPage = max(1, (int) ($_GET['page'] ?? 1));
+$currentPage = max(1, (int) ($_GET['pg'] ?? 1));
 $perPage = $appConfig['sites_per_page'] ?? 20;
 
 // Подсчёт сайтов на модерации
