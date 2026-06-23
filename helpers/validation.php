@@ -29,6 +29,14 @@ function validate(array $data, array $rules, ?\App\Database $db = null): array
                 $params = explode(',', $paramStr);
             }
 
+            // nullable: пропускаем все проверки если значение пустое
+            if ($rule === 'nullable') {
+                if (empty($value) && $value !== '0' && $value !== 0) {
+                    continue 2; // переход к следующему полю
+                }
+                continue;
+            }
+
             switch ($rule) {
                 case 'required':
                     if (empty($value) && $value !== '0' && $value !== 0) {
