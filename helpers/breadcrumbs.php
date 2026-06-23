@@ -115,10 +115,9 @@ function build_breadcrumbs(\PDO $db, array $items): array
  */
 function breadcrumbs_from_path(\PDO $db, int $sectionId): array
 {
-    $section = $db->query(
-        'SELECT id, parent_id, path, name, slug FROM sections WHERE id = ?',
-        [$sectionId]
-    )->fetch();
+    $stmt = $db->prepare('SELECT id, parent_id, path, name, slug FROM sections WHERE id = ?');
+    $stmt->execute([$sectionId]);
+    $section = $stmt->fetch();
 
     if (!$section) {
         return breadcrumbs_generate([['label' => 'Раздел не найден', 'url' => null]]);
@@ -134,10 +133,8 @@ function breadcrumbs_from_path(\PDO $db, int $sectionId): array
 
         if (!empty($parentIds)) {
             $placeholders = implode(',', array_fill(0, count($parentIds), '?'));
-            $stmt = $db->query(
-                "SELECT id, name, slug FROM sections WHERE id IN ({$placeholders}) ORDER BY id",
-                $parentIds
-            );
+            $stmt = $db->prepare("SELECT id, name, slug FROM sections WHERE id IN ({$placeholders}) ORDER BY id");
+            $stmt->execute(array_values($parentIds));
             $ancestors = $stmt->fetchAll();
 
             foreach ($ancestors as $ancestor) {
