@@ -41,7 +41,8 @@ $routes = [
     'moderator/moderate'      => __DIR__ . '/../moderator/moderate.php',
     'moderator/sections'      => __DIR__ . '/../moderator/sections.php',
     'moderator/sections/add'  => __DIR__ . '/../moderator/section_add.php',
-    'moderator/sections/edit' => __DIR__ . '/../moderator/section_edit.php',
+    'moderator/sections/edit'   => __DIR__ . '/../moderator/section_edit.php',
+    'moderator/sections/delete' => __DIR__ . '/../moderator/sections.php', // POST-обработка в sections.php
 ];
 
 if (isset($routes[$page])) {
