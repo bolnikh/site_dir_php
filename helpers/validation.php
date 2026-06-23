@@ -5,104 +5,161 @@
  */
 
 /**
- * Результат валидации одного поля
+ * Валидация массива данных по набору правил
+ *
+ * @param array      $data  Данные для проверки (ключ => значение)
+ * @param array      $rules Правила (поле => 'rule1|rule2|...')
+ * @param \App\Database|null $db Для правил unique/exists
+ * @return array Массив ошибок: [['field' => '...', 'message' => '...'], ...]
  */
-function validation_error(string $field, string $message): array
+function validate(array $data, array $rules, ?\App\Database $db = null): array
 {
-    return ['field' => $field, 'message' => $message];
+    $errors = [];
+
+    foreach ($rules as $field => $ruleString) {
+        $value = $data[$field] ?? null;
+        $ruleList = explode('|', $ruleString);
+
+        foreach ($ruleList as $rule) {
+            $params = [];
+
+            // Разбор правила с параметрами: unique:table,column
+            if (str_contains($rule, ':')) {
+                [$rule, $paramStr] = explode(':', $rule, 2);
+                $params = explode(',', $paramStr);
+            }
+
+            switch ($rule) {
+                case 'required':
+                    if (empty($value) && $value !== '0' && $value !== 0) {
+                        $errors[] = [
+                            'field' => $field,
+                            'message' => "Поле «{$field}» обязательно для заполнения.",
+                        ];
+                    }
+                    break;
+
+                case 'string':
+                    if (!empty($value) && !is_string($value)) {
+                        $errors[] = [
+                            'field' => $field,
+                            'message' => "Поле «{$field}» должно быть строкой.",
+                        ];
+                    }
+                    break;
+
+                case 'integer':
+                    if (!empty($value) && !filter_var($value, FILTER_VALIDATE_INT)) {
+                        $errors[] = [
+                            'field' => $field,
+                            'message' => "Поле «{$field}» должно быть целым числом.",
+                        ];
+                    }
+                    break;
+
+                case 'email':
+                    if (!empty($value) && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        $errors[] = [
+                            'field' => $field,
+                            'message' => 'Некорректный email-адрес.',
+                        ];
+                    }
+                    break;
+
+                case 'url':
+                    if (!empty($value) && !filter_var($value, FILTER_VALIDATE_URL)) {
+                        $errors[] = [
+                            'field' => $field,
+                            'message' => 'Некорректный URL.',
+                        ];
+                    }
+                    break;
+
+                case 'accepted':
+                    if (empty($value)) {
+                        $errors[] = [
+                            'field' => $field,
+                            'message' => 'Необходимо принять условия.',
+                        ];
+                    }
+                    break;
+
+                case 'max':
+                    $max = (int) ($params[0] ?? 255);
+                    if (!empty($value) && is_string($value) && mb_strlen($value) > $max) {
+                        $errors[] = [
+                            'field' => $field,
+                            'message' => "Поле «{$field}» не должно превышать {$max} символов (сейчас " . mb_strlen($value) . ").",
+                        ];
+                    }
+                    break;
+
+                case 'unique':
+                    if ($db !== null && !empty($value)) {
+                        $table = $params[0] ?? '';
+                        $column = $params[1] ?? $field;
+                        $excludeField = $params[2] ?? null;
+                        $excludeValue = $params[3] ?? null;
+
+                        $sql = "SELECT COUNT(*) FROM {$table} WHERE {$column} = ?";
+                        $bindings = [$value];
+
+                        if ($excludeField && $excludeValue) {
+                            $sql .= " AND {$excludeField} != ?";
+                            $bindings[] = $excludeValue;
+                        }
+
+                        $count = $db->fetchColumn($sql, $bindings);
+                        if ((int) $count > 0) {
+                            $errors[] = [
+                                'field' => $field,
+                                'message' => "Такое значение поля «{$field}» уже существует.",
+                            ];
+                        }
+                    }
+                    break;
+
+                case 'exists':
+                    if ($db !== null && !empty($value)) {
+                        $table = $params[0] ?? '';
+                        $column = $params[1] ?? 'id';
+
+                        $count = $db->fetchColumn(
+                            "SELECT COUNT(*) FROM {$table} WHERE {$column} = ?",
+                            [$value]
+                        );
+                        if ((int) $count === 0) {
+                            $errors[] = [
+                                'field' => $field,
+                                'message' => "Выбранное значение для «{$field}» не существует.",
+                            ];
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
+    return $errors;
 }
 
 /**
- * Валидация обязательного поля
+ * Удобная функция: первая ошибка для поля
  */
-function validate_required(mixed $value, string $field, array &$errors): void
+function validation_first_error(array $errors, string $field): ?string
 {
-    if (empty($value) && $value !== '0') {
-        $errors[] = validation_error($field, "Поле «{$field}» обязательно для заполнения.");
+    foreach ($errors as $error) {
+        if ($error['field'] === $field) {
+            return $error['message'];
+        }
     }
+    return null;
 }
 
 /**
- * Валидация максимальной длины строки
+ * Есть ли ошибки?
  */
-function validate_max_length(string $value, int $max, string $field, array &$errors): void
+function validation_passed(array $errors): bool
 {
-    if (mb_strlen($value) > $max) {
-        $errors[] = validation_error($field, "Поле «{$field}» не должно превышать {$max} символов.");
-    }
-}
-
-/**
- * Валидация email
- */
-function validate_email(string $value, string $field, array &$errors): void
-{
-    if (!empty($value) && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = validation_error($field, 'Некорректный email-адрес.');
-    }
-}
-
-/**
- * Валидация URL
- */
-function validate_url(string $value, string $field, array &$errors): void
-{
-    if (!empty($value) && !filter_var($value, FILTER_VALIDATE_URL)) {
-        $errors[] = validation_error($field, 'Некорректный URL.');
-    }
-}
-
-/**
- * Валидация чекбокса (должен быть принят)
- */
-function validate_accepted(mixed $value, string $field, array &$errors): void
-{
-    if (empty($value)) {
-        $errors[] = validation_error($field, "Необходимо принять условия.");
-    }
-}
-
-/**
- * Валидация целого числа
- */
-function validate_integer(mixed $value, string $field, array &$errors): void
-{
-    if (!empty($value) && !filter_var($value, FILTER_VALIDATE_INT)) {
-        $errors[] = validation_error($field, "Поле «{$field}» должно быть целым числом.");
-    }
-}
-
-/**
- * Проверка существования записи в таблице
- */
-function validate_exists(int $value, string $table, string $column, \App\Database $db, string $field, array &$errors): void
-{
-    $count = $db->fetchColumn(
-        "SELECT COUNT(*) FROM {$table} WHERE {$column} = ?",
-        [$value]
-    );
-
-    if ((int) $count === 0) {
-        $errors[] = validation_error($field, "Выбранное значение для «{$field}» не существует.");
-    }
-}
-
-/**
- * Проверка уникальности значения в таблице
- */
-function validate_unique(string $value, string $table, string $column, \App\Database $db, string $field, array &$errors, ?int $excludeId = null): void
-{
-    $sql = "SELECT COUNT(*) FROM {$table} WHERE {$column} = ?";
-    $params = [$value];
-
-    if ($excludeId !== null) {
-        $sql .= ' AND id != ?';
-        $params[] = $excludeId;
-    }
-
-    $count = $db->fetchColumn($sql, $params);
-
-    if ((int) $count > 0) {
-        $errors[] = validation_error($field, "Такое значение поля «{$field}» уже существует.");
-    }
+    return empty($errors);
 }

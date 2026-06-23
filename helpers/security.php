@@ -8,9 +8,9 @@
  * Экранирование строки для безопасного вывода в HTML
  * Всегда используйте эту функцию для вывода пользовательских данных
  */
-function h(mixed $value): string
+function h(?string $value): string
 {
-    return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+    return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
 }
 
 /**
@@ -40,6 +40,14 @@ function purify_html(string $dirtyHtml): string
     }
 
     return $purifier->purify($dirtyHtml);
+}
+
+/**
+ * Очистка HTML (синоним purify_html, согласно спецификации шага 4)
+ */
+function clean_html(string $html): string
+{
+    return purify_html($html);
 }
 
 /**

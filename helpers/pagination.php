@@ -50,3 +50,65 @@ function pagination_sql(int $page, int $perPage): string
     $offset = ($page - 1) * $perPage;
     return "LIMIT {$perPage} OFFSET {$offset}";
 }
+
+/**
+ * Отрендерить HTML постраничной навигации (Bootstrap)
+ */
+function render_pagination(int $currentPage, int $totalPages, string $baseUrl, array $queryParams = []): string
+{
+    if ($totalPages <= 1) {
+        return '';
+    }
+
+    $currentPage = max(1, min($currentPage, $totalPages));
+    $html = '<nav class="pagination-nav" aria-label="Навигация по страницам">';
+    $html .= '<ul class="pagination justify-content-center">';
+
+    // Кнопка «Предыдущая»
+    if ($currentPage > 1) {
+        $prevUrl = pagination_url($baseUrl, $currentPage - 1, $queryParams);
+        $html .= '<li class="page-item"><a class="page-link" href="' . h($prevUrl) . '" aria-label="Предыдущая">&laquo;</a></li>';
+    } else {
+        $html .= '<li class="page-item disabled"><span class="page-link">&laquo;</span></li>';
+    }
+
+    // Номера страниц
+    $start = max(1, $currentPage - 2);
+    $end = min($totalPages, $currentPage + 2);
+
+    if ($start > 1) {
+        $html .= '<li class="page-item"><a class="page-link" href="' . h(pagination_url($baseUrl, 1, $queryParams)) . '">1</a></li>';
+        if ($start > 2) {
+            $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
+        }
+    }
+
+    for ($i = $start; $i <= $end; $i++) {
+        if ($i === $currentPage) {
+            $html .= '<li class="page-item active" aria-current="page"><span class="page-link">' . $i . '</span></li>';
+        } else {
+            $html .= '<li class="page-item"><a class="page-link" href="' . h(pagination_url($baseUrl, $i, $queryParams)) . '">' . $i . '</a></li>';
+        }
+    }
+
+    if ($end < $totalPages) {
+        if ($end < $totalPages - 1) {
+            $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
+        }
+        $html .= '<li class="page-item"><a class="page-link" href="' . h(pagination_url($baseUrl, $totalPages, $queryParams)) . '">' . $totalPages . '</a></li>';
+    }
+
+    // Кнопка «Следующая»
+    if ($currentPage < $totalPages) {
+        $nextUrl = pagination_url($baseUrl, $currentPage + 1, $queryParams);
+        $html .= '<li class="page-item"><a class="page-link" href="' . h($nextUrl) . '" aria-label="Следующая">&raquo;</a></li>';
+    } else {
+        $html .= '<li class="page-item disabled"><span class="page-link">&raquo;</span></li>';
+    }
+
+    $html .= '</ul>';
+    $html .= '<div class="text-center text-muted small">Страница ' . $currentPage . ' из ' . $totalPages . '</div>';
+    $html .= '</nav>';
+
+    return $html;
+}

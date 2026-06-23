@@ -94,6 +94,27 @@ class Cache
     }
 
     /**
+     * Получить из кэша или вычислить, сохранить и вернуть
+     */
+    public function remember(string $key, callable $callback, int $ttl = 300): mixed
+    {
+        if ($this->available) {
+            $cached = $this->get($key);
+            if ($cached !== null) {
+                return $cached;
+            }
+        }
+
+        $value = $callback();
+
+        if ($this->available) {
+            $this->set($key, $value, $ttl);
+        }
+
+        return $value;
+    }
+
+    /**
      * Проверить существование ключа
      */
     public function has(string $key): bool

@@ -16,7 +16,8 @@
             "helpers/validation.php",
             "helpers/breadcrumbs.php",
             "helpers/pagination.php",
-            "helpers/security.php"
+            "helpers/security.php",
+            "helpers/slug.php"
         ]
     },
     "config": {
