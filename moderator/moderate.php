@@ -209,9 +209,12 @@ function _handleModerationAction(
             _invalidateSiteCache($cache, $site);
 
             if (!empty($site['email'])) {
-                $subject = 'Ваш сайт "' . $site['name'] . '" опубликован!';
-                $body = email_site_approved($site['name'], (int) $site['id']);
-                $mailer->send($site['email'], $subject, $body);
+                $mailer->sendSiteApproved(
+                    $site['email'],
+                    $site['name'],
+                    (int) $site['id'],
+                    $appConfig['url']
+                );
             }
 
             flash_set('success', 'Сайт "' . $site['name'] . '" одобрен и опубликован!');
@@ -226,9 +229,11 @@ function _handleModerationAction(
             _invalidateSiteCache($cache, $site);
 
             if (!empty($site['email'])) {
-                $subject = 'Ваш сайт "' . $site['name'] . '" отклонён';
-                $body = email_site_rejected($site['name']);
-                $mailer->send($site['email'], $subject, $body);
+                $mailer->sendSiteRejected(
+                    $site['email'],
+                    $site['name'],
+                    'catalog@homecatalog.ru'
+                );
             }
 
             flash_set('success', 'Сайт "' . $site['name'] . '" отклонён.');

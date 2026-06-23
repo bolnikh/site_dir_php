@@ -64,4 +64,36 @@ class Mailer
             return false;
         }
     }
+
+    /**
+     * Отправить уведомление об одобрении сайта
+     */
+    public function sendSiteApproved(string $toEmail, string $siteName, int $siteId, string $baseUrl): bool
+    {
+        $subject = 'Ваш сайт "' . $siteName . '" опубликован!';
+
+        $body = "Здравствуйте!<br><br>"
+              . 'Ваш сайт "<strong>' . htmlspecialchars($siteName) . '</strong>" прошёл модерацию и опубликован в каталоге.<br>'
+              . 'Посмотреть: <a href="' . htmlspecialchars($baseUrl) . '/site/' . $siteId . '">' . htmlspecialchars($baseUrl) . '/site/' . $siteId . '</a><br><br>'
+              . 'С уважением,<br>'
+              . 'Каталог сайтов';
+
+        return $this->send($toEmail, $subject, $body);
+    }
+
+    /**
+     * Отправить уведомление об отклонении сайта
+     */
+    public function sendSiteRejected(string $toEmail, string $siteName, string $contactEmail): bool
+    {
+        $subject = 'Ваш сайт "' . $siteName . '" отклонён';
+
+        $body = 'Здравствуйте!<br><br>'
+              . 'К сожалению, ваш сайт "<strong>' . htmlspecialchars($siteName) . '</strong>" не прошёл модерацию.<br>'
+              . 'Если вы считаете это ошибкой, свяжитесь с нами: <a href="mailto:' . htmlspecialchars($contactEmail) . '">' . htmlspecialchars($contactEmail) . '</a><br><br>'
+              . 'С уважением,<br>'
+              . 'Каталог сайтов';
+
+        return $this->send($toEmail, $subject, $body);
+    }
 }
