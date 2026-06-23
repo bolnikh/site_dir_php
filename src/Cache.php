@@ -34,7 +34,8 @@ class Cache
     }
 
     /**
-     * Получить значение из кэша
+     * Получить значение из кэша.
+     * Данные хранятся в виде ['data' => ..., 'ts' => ...] для корректной обработки null.
      */
     public function get(string $key): mixed
     {
@@ -48,11 +49,12 @@ class Cache
         }
 
         $decoded = json_decode($value, true);
-        return $decoded !== null ? $decoded : $value;
+        return $decoded['data'] ?? null;
     }
 
     /**
-     * Сохранить значение в кэш
+     * Сохранить значение в кэш.
+     * Оборачивается в ['data' => ..., 'ts' => ...] чтобы null не терялся.
      */
     public function set(string $key, mixed $value, int $ttl = 300): bool
     {
@@ -60,7 +62,11 @@ class Cache
             return false;
         }
 
-        $encoded = is_string($value) ? $value : json_encode($value, JSON_UNESCAPED_UNICODE);
+        $encoded = json_encode([
+            'data' => $value,
+            'ts' => time(),
+        ], JSON_UNESCAPED_UNICODE);
+
         return $this->redis->setex($this->prefix . $key, $ttl, $encoded);
     }
 
@@ -77,7 +83,8 @@ class Cache
     }
 
     /**
-     * Удалить ключи по паттерну
+     * Удалить ключи по паттерну.
+     * Использует SCAN вместо KEYS для production-безопасности.
      */
     public function deletePattern(string $pattern): int
     {
@@ -85,16 +92,22 @@ class Cache
             return 0;
         }
 
-        $keys = $this->redis->keys($this->prefix . $pattern);
-        if (empty($keys)) {
-            return 0;
+        $count = 0;
+        $iterator = null;
+        $fullPattern = $this->prefix . $pattern;
+
+        while ($keys = $this->redis->scan($iterator, $fullPattern, 100)) {
+            if (!empty($keys)) {
+                $count += $this->redis->del($keys);
+            }
         }
 
-        return $this->redis->del($keys);
+        return $count;
     }
 
     /**
-     * Получить из кэша или вычислить, сохранить и вернуть
+     * Получить из кэша или вычислить, сохранить и вернуть.
+     * Не кэширует null-результаты.
      */
     public function remember(string $key, callable $callback, int $ttl = 300): mixed
     {
@@ -107,7 +120,7 @@ class Cache
 
         $value = $callback();
 
-        if ($this->available) {
+        if ($value !== null && $this->available) {
             $this->set($key, $value, $ttl);
         }
 
