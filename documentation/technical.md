@@ -46,7 +46,7 @@ return [
 С уважением, Каталог сайтов
 ```
 
-**Отправка:** использовать `mail()` для отладки, затем PHPMailer или SwiftMailer для продакшена.
+**Отправка:** использовать PHPMailer
 
 ---
 
@@ -79,28 +79,7 @@ return [
 
 ## Визуальный редактор
 
-**Рекомендация:** TinyMCE (бесплатная версия, без API-ключа) или Summernote (Bootstrap-совместимый, легче).
-
-Базовый набор кнопок (как в макетах):
-- Bold, Italic, Underline
-- Bullet list, Ordered list
-- Quote, Link
-
-**Подключение TinyMCE (через CDN):**
-```html
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js"></script>
-<script>
-tinymce.init({
-  selector: 'textarea.editor',
-  plugins: 'lists link',
-  toolbar: 'bold italic underline | bullist numlist | blockquote link',
-  menubar: false,
-  height: 200
-});
-</script>
-```
-
-**Альтернатива (Summernote, Bootstrap-совместимый):**
+** Summernote, Bootstrap-совместимый:**
 ```html
 <script src="https://cdn.jsdelivr.net/npm/summernote/dist/summernote-bs4.min.js"></script>
 ```
@@ -119,7 +98,7 @@ server {
     index index.php;
 
     # ЧПУ: /section/slug → section.php?slug=slug
-    #      /site/123     → site.php?id=123
+    #      /site/slug     → site.php?slug=slug
     location / {
         try_files $uri $uri/ /index.php?$query_string;
     }
@@ -128,9 +107,21 @@ server {
         rewrite ^/section/([a-z0-9-]+)$ /section.php?slug=$1 last;
     }
 
-    location ~ ^/site/([0-9]+)$ {
-        rewrite ^/site/([0-9]+)$ /site.php?id=$1 last;
+    location ~ ^/site/([a-z0-9-]+)$ {
+        rewrite ^/site/([a-z0-9-]+)$ /site.php?slug=$1 last;
     }
+
+	location /about {
+		try_files $uri $uri/ /about.php?$args;
+	}
+
+	location /rules {
+		try_files $uri $uri/ /rules.php?$args;
+	}
+
+	location /add {
+		try_files $uri $uri/ /add.php?$args;
+	}
 
     location ~ \.php$ {
         fastcgi_pass php-fpm:9000;
@@ -151,16 +142,11 @@ server {
 |---|---|
 | `/` | `index.php` |
 | `/section/slug` | `section.php?slug=slug` |
-| `/site/123` | `site.php?id=123` |
+| `/site/slug` | `site.php?slug=slug` |
 | `/about` | `about.php` |
 | `/rules` | `rules.php` |
 | `/add` | `add.php` |
-| `/admin` | `admin/index.php` |
-| `/admin/login` | `admin/login.php` |
-| `/admin/moderate/123` | `admin/moderate.php?id=123` |
-| `/admin/sections` | `admin/sections.php` |
-| `/admin/sections/add` | `admin/section_add.php` |
-| `/admin/sections/edit/5` | `admin/section_edit.php?id=5` |
+
 
 ---
 
@@ -212,3 +198,24 @@ server {
 - Всегда использовать `htmlspecialchars($value, ENT_QUOTES, 'UTF-8')` при выводе пользовательских данных
 - Для описания сайта (HTML из редактора): использовать HTMLPurifier для фильтрации тегов
 - Никогда не выводить неэкранированные данные в HTML
+
+
+## Соединение с БД
+
+* user - catalog_user
+* password - FSY3hWw3NQJt
+* database - catalog
+
+
+## Docker compose
+
+Приложение запускается через Docker compose
+
+Nginx + php-fpm + php 8.5 + redis + postgres 18
+
+php содержит нужные библиотеки для работы c postgres, redis, PHPMailer в том числе
+
+* openssl
+* mbstring
+* postgres pdo
+* php-redis

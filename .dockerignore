@@ -1,0 +1,7 @@
+.git/
+documentation/
+steps/
+*.md
+!CLAUDE.md
+.env.example
+promt.txt

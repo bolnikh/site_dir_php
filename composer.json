@@ -1,0 +1,26 @@
+{
+    "name": "homecatalog/site-directory",
+    "description": "Каталог сайтов — веб-директория сайтов по тематикам",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "phpmailer/phpmailer": "^7.1",
+        "ezyang/htmlpurifier": "^4.19"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        },
+        "files": [
+            "helpers/flash.php",
+            "helpers/validation.php",
+            "helpers/breadcrumbs.php",
+            "helpers/pagination.php",
+            "helpers/security.php"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}
