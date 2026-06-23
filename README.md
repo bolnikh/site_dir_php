@@ -2,11 +2,12 @@
 
 Сделано на claude code + deepseek
   
-# Для запуска
+# Для запуска нужен докер
 
 Все команды докера выполняются из корневой директории проекта (где этот файл лежит).
 
 sudo docker compose up -d --build
+sudo docker compose exec php composer composer install
 sudo docker compose exec php composer dump-autoload
 
 # Тестовые данные
