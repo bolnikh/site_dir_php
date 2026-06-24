@@ -26,7 +26,10 @@
 | 15 | [15_redis_caching.md](15_redis_caching.md) | Интеграция Redis-кэширования (phpredis) | 06, 07, 08 |
 | 16 | [16_email_notifications.md](16_email_notifications.md) | Email-уведомления через PHPMailer | 13 |
 | 17 | [17_nginx_deployment.md](17_nginx_deployment.md) | Настройка nginx и фронт-контроллера | 01, все |
-| 18 | [18_testing_and_final.md](18_testing_and_final.md) | Финальное тестирование и проверка | все |
+| 18 | [18_testing_and_final.md](18_testing_and_final.md) | Финальное тестирование и проверка (ручное) | все |
+| 19 | [19_contact_us.md](19_contact_us.md) | Страница «Свяжитесь с нами» и панель модератора | 05, 16 |
+| 20 | [20_func_test.md](20_func_test.md) | Спецификация автоматизированных функциональных тестов | все |
+| 21 | [21_playwright_implementation.md](21_playwright_implementation.md) | Реализация Playwright-тестов | 20 |
 
 ## Порядок выполнения
 
@@ -53,7 +56,11 @@
 16_email_notifications  ──┤
                             │
 17_nginx_deployment     ──┘── nginx
-18_testing_and_final    ─────── финальная проверка
+18_testing_and_final    ─────── финальная проверка (ручная)
+19_contact_us           ─────── форма обратной связи
+                                │
+20_func_test            ─────── спецификация автотестов
+21_playwright_impl      ─────── реализация Playwright
 ```
 
 ## Структура проекта (после реализации)
@@ -77,6 +84,14 @@
 ├── migrations/               # SQL-миграции
 ├── nginx/                    # Конфигурация nginx
 │   └── site.conf
+├── tests/                    # Playwright-тесты
+│   ├── playwright.config.ts
+│   ├── package.json
+│   ├── fixtures/
+│   ├── public/
+│   ├── moderator/
+│   ├── integration/
+│   └── security/
 ├── documentation/            # Документация проекта
 ├── steps/                    # Шаги реализации (эта директория)
 ├── composer.json
