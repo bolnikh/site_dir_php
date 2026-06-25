@@ -1,0 +1,21 @@
+{
+  "name": "homecatalog-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Функциональные тесты для Каталога сайтов",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:smoke": "npx playwright test public/smoke.spec.ts",
+    "test:public": "npx playwright test public/",
+    "test:moderator": "npx playwright test moderator/",
+    "test:integration": "npx playwright test integration/",
+    "test:security": "npx playwright test security/",
+    "test:ui": "npx playwright test --ui",
+    "test:headed": "npx playwright test --headed",
+    "report": "npx playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "wait-on": "^8.0.0"
+  }
+}

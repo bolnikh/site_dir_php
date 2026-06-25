@@ -201,6 +201,7 @@ function _handleModerationAction(
     \App\Mailer $mailer,
     array $byParent
 ): ?string {
+    global $appConfig;
     switch ($action) {
         case 'approve':
             $db->execute(

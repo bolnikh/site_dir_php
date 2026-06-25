@@ -23,9 +23,23 @@ $mailer = new \App\Mailer(require __DIR__ . '/../config/mail.php');
 require_once __DIR__ . '/../templates/layout.php';
 
 // Роутинг
-$page = $_GET['page'] ?? 'home';
+$page = $_GET['page'] ?? null;
 $slug = $_GET['slug'] ?? null;
 $id = $_GET['id'] ?? null;
+
+// Если page не задан явно (nginx try_files fallback), проверяем URL
+if ($page === null) {
+    $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+    if ($requestPath !== '/' && $requestPath !== '/index.php') {
+        // Неизвестный URL — 404
+        http_response_code(404);
+        render_page('404', breadcrumbs_static('Страница не найдена'), function () {
+            echo '<h1>404 — Страница не найдена</h1>';
+        });
+        return;
+    }
+    $page = 'home';
+}
 
 // Карта маршрутов
 $routes = [
@@ -45,11 +59,14 @@ $routes = [
     'moderator/sections/edit'   => __DIR__ . '/../moderator/section_edit.php',
     'moderator/sections/delete' => __DIR__ . '/../moderator/sections.php', // POST-обработка в sections.php
     'moderator/contact_us'      => __DIR__ . '/../moderator/contact_us.php',
+    'moderator/reset-test-data' => __DIR__ . '/../moderator/reset_test_data.php',
 ];
 
 if (isset($routes[$page])) {
     require $routes[$page];
 } else {
     http_response_code(404);
-    echo '<h1>404 — Страница не найдена</h1>';
+    render_page('404', breadcrumbs_static('Страница не найдена'), function () {
+        echo '<h1>404 — Страница не найдена</h1>';
+    });
 }

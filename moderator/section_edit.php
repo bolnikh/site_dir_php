@@ -143,7 +143,7 @@ render_page('Редактировать раздел', breadcrumbs_generate([
         </div>
     <?php endif; ?>
 
-    <form method="POST" action="/moderator/sections/edit?id=<?= $sectionId ?>">
+    <form method="POST" action="/moderator/sections/edit?id=<?= $sectionId ?>" novalidate>
         <div class="mb-3">
             <label for="parent_id" class="form-label">Родительский раздел:</label>
             <select name="parent_id" id="parent_id" class="form-select">

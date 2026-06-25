@@ -47,7 +47,7 @@ render_page('Вход для модератора', breadcrumbs_static('Вход
                 <div class="alert alert-danger"><?= h($error) ?></div>
             <?php endif; ?>
 
-            <form method="POST" action="/moderator/login">
+            <form method="POST" action="/moderator/login" novalidate>
                 <div class="mb-3">
                     <label for="username" class="form-label">Логин:</label>
                     <input type="text" name="username" id="username"

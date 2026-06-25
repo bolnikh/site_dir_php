@@ -1,0 +1,88 @@
+# ============================================================
+# Docker Compose для запуска тестов (Playwright)
+#
+# Использование:
+#   docker compose -f docker-compose.test.yml up --build --abort-on-container-exit
+#   docker compose -f docker-compose.test.yml down -v
+# ============================================================
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: catalog_test_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./public:/var/www/public:ro
+      - ./nginx/site.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - catalog_test_net
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: catalog_test_php
+    volumes:
+      - .:/var/www
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=catalog
+      - DB_USER=catalog_user
+      - DB_PASSWORD=FSY3hWw3NQJt
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SMTP_HOST=mailhog
+      - SMTP_PORT=1025
+      - SMTP_USER=
+      - SMTP_PASS=
+      - SMTP_ENCRYPTION=
+      - APP_DEBUG=true
+    networks:
+      - catalog_test_net
+    healthcheck:
+      test: ["CMD", "php-fpm", "-t"]
+      interval: 2s
+      timeout: 3s
+      retries: 5
+
+  postgres:
+    image: postgres:18
+    container_name: catalog_test_postgres
+    environment:
+      POSTGRES_DB: catalog
+      POSTGRES_USER: catalog_user
+      POSTGRES_PASSWORD: FSY3hWw3NQJt
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata_test:/var/lib/postgresql
+      - ./tests/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - catalog_test_net
+
+  redis:
+    image: redis:7-alpine
+    container_name: catalog_test_redis
+    ports:
+      - "6380:6379"
+    networks:
+      - catalog_test_net
+
+  # MailHog — перехватывает SMTP-письма в тестовом окружении
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: catalog_test_mailhog
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Web UI
+    networks:
+      - catalog_test_net
+
+volumes:
+  pgdata_test:
+
+networks:
+  catalog_test_net:
+    driver: bridge

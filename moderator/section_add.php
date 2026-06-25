@@ -100,7 +100,7 @@ render_page('Добавить раздел', breadcrumbs_generate([
         </div>
     <?php endif; ?>
 
-    <form method="POST" action="/moderator/sections/add">
+    <form method="POST" action="/moderator/sections/add" novalidate>
         <div class="mb-3">
             <label for="parent_id" class="form-label">Родительский раздел (пусто = корневой):</label>
             <select name="parent_id" id="parent_id" class="form-select">

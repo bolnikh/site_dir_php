@@ -127,7 +127,7 @@ render_page('Добавить сайт', breadcrumbs_static('Добавить с
         <div class="mb-3">
             <label for="name" class="form-label">2. Название сайта (обязательно):</label>
             <input type="text" name="name" id="name" class="form-control <?= validation_first_error($errors, 'name') ? 'is-invalid' : '' ?>"
-                   maxlength="512" required value="<?= h($old['name'] ?? '') ?>">
+                   required value="<?= h($old['name'] ?? '') ?>">
             <?php if ($err = validation_first_error($errors, 'name')): ?>
                 <div class="invalid-feedback"><?= h($err) ?></div>
             <?php endif; ?>

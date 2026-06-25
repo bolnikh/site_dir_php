@@ -10,11 +10,14 @@ sudo docker compose up -d --build
 sudo docker compose exec php composer composer install
 sudo docker compose exec php composer dump-autoload
 
-# Тестовые данные
+# Тестовые данные для работы сайта
 
+```
+sudo docker compose exec -T postgres psql -U catalog_user -d postgres -c "CREATE DATABASE catalog OWNER catalog_user;"
 sudo docker compose exec -T postgres psql -U catalog_user -d catalog < migrations/001_initial.sql
 sudo docker compose exec -T postgres psql -U catalog_user -d catalog < migrations/002_seed_data.sql
 sudo docker compose exec -T postgres psql -U catalog_user -d catalog < migrations/003_contact_us.sql
+```
 
 # Старт / стоп
 
