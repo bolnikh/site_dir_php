@@ -6,9 +6,12 @@
 
 Все команды докера выполняются из корневой директории проекта (где этот файл лежит).
 
+```
 sudo docker compose up -d --build
 sudo docker compose exec php composer composer install
 sudo docker compose exec php composer dump-autoload
+```
+
 
 # Тестовые данные для работы сайта
 
@@ -21,16 +24,22 @@ sudo docker compose exec -T postgres psql -U catalog_user -d catalog < migration
 
 # Старт / стоп
 
+```
 sudo docker compose up -d
 sudo docker compose down
+```
 
 # Доступ для пользователей
 
+```
 http://localhost
+```
 
 # Доступ для модератора
 
+```
 http://localhost/moderator
+```
 
 admin / password
 
